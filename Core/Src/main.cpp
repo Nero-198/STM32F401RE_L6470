@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <L6470.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
