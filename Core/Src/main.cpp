@@ -95,19 +95,14 @@ SPI_Interface spiInterface(&hspi3, CS1_GPIO_Port, CS1_Pin);
   MX_USART2_UART_Init();
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t getPARAM[] ={0b00100001};
-  uint8_t shiftPARAM[] = {0x00,0x00,0x00};
-uint8_t txBuffer[4] = {0b01010001,0b00000000,0b00001010,0b00000000};
-uint8_t rxBuffer[4];
-  std::vector<uint8_t> commandData = l6470.sendCommand(0x00,0x00,5);
+  spiInterface.setSTEP_MODE(0b00000000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  spiInterface.sendSPI(txBuffer, 4);
-	  HAL_Delay(1000);
+	  spiInterface.sendRUN(0x4000,FORWARD);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
