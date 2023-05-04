@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <L6470.h>
+#include <SPIInterface.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,6 +71,7 @@ int main(void)
   /* USER CODE BEGIN 1 */
 //L6470のインスタンス化
 L6470 l6470;
+SPI_Interface spiInterface(&hspi3, CS1_GPIO_Port, CS1_Pin);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,7 +97,7 @@ L6470 l6470;
   /* USER CODE BEGIN 2 */
   uint8_t getPARAM[] ={0b00100001};
   uint8_t shiftPARAM[] = {0x00,0x00,0x00};
-uint8_t txBuffer[] = {0b01010001,0b00000000,0b00110010,0b00000000};
+uint8_t txBuffer[4] = {0b01010001,0b00000000,0b00001010,0b00000000};
 uint8_t rxBuffer[4];
   std::vector<uint8_t> commandData = l6470.sendCommand(0x00,0x00,5);
   /* USER CODE END 2 */
@@ -104,20 +106,8 @@ uint8_t rxBuffer[4];
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi3, &txBuffer[0], rxBuffer, 1, 1000);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_SET);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi3, &txBuffer[1], rxBuffer, 1, 1000);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_SET);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi3, &txBuffer[2], rxBuffer, 1, 1000);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_SET);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi3, &txBuffer[3], rxBuffer, 1, 1000);
-	  HAL_GPIO_WritePin(CS1_GPIO_Port, CS1_Pin, GPIO_PIN_SET);
+	  spiInterface.sendSPI(txBuffer, 4);
 	  HAL_Delay(1000);
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

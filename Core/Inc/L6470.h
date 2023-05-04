@@ -13,23 +13,28 @@
 #include<string>
 #include<vector>
 
+enum moterDirection {
+    REVERSE = 0,
+    FORWARD = 1
+};
+
+
 class L6470 {
 public:
 	L6470();
-    L6470(SPI_HandleTypeDef* hspi);
     virtual ~L6470();
-
+    uint8_t sendBuffer[4] = {0};	//SPI通信プログラムに送る値を格納する
+    uint8_t reciveBuffer[4] = {0};	//SPI通信プログラムから受け取る値を格納する
    // void sendCommand(uint8_t command, const uint8_t* data, uint16_t size);
     void receiveData(uint8_t* data, uint16_t size);
-
 //L6470 commands (With argument)
     uint8_t* SETPARAM(uint8_t* PARAM, uint8_t data);
-    uint8_t RUN(uint8_t DIR);
-    uint8_t STEPCLOCK(uint8_t DIR);
-    uint8_t MOVE(uint8_t DIR);
-    uint8_t GOTO_DIR(uint8_t DIR);
-    uint8_t GOUNTILL(uint8_t ACT, uint8_t DIR);
-    uint8_t RELEASESW(uint8_t ACT, uint8_t DIR);
+    uint8_t* RUN(moterDirection DIR, uint32_t SPD);
+    uint8_t STEPCLOCK(moterDirection DIR);
+    uint8_t MOVE(moterDirection DIR);
+    uint8_t GOTO_DIR(moterDirection DIR);
+    uint8_t GOUNTILL(uint8_t ACT, moterDirection DIR);
+    uint8_t RELEASESW(uint8_t ACT, moterDirection DIR);
     void sendComandComplete();
     std::vector<uint8_t> sendCommand(uint8_t command, const uint8_t* data, uint16_t size);
 
